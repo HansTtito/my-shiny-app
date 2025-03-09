@@ -7,18 +7,18 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos de la aplicación
-COPY . /srv/shiny-server/mi-app/
+# Copiar archivos de la aplicación a la ubicación correcta
+COPY my-shiny-app /srv/shiny-server/
 
 # Script para instalar paquetes
-COPY install_packages.R /tmp/
-RUN Rscript /tmp/install_packages.R
+COPY packages.R /tmp/
+RUN Rscript /tmp/packages.R
 
 # Configurar permisos
-RUN chown -R shiny:shiny /srv/shiny-server/mi-app/
+RUN chown -R shiny:shiny /srv/shiny-server/
 
 # Exponer puerto
 EXPOSE 3838
 
-# Comando para iniciar el servidor Shiny
+# Iniciar Shiny Server
 CMD ["/usr/bin/shiny-server"]
